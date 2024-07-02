@@ -6,6 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "CodingPawn.generated.h"
 
+// 전방선언 
+class UStaticMeshComponent;
+
 UCLASS()
 class SHOOINGCPP_API ACodingPawn : public APawn
 {
@@ -31,7 +34,7 @@ public:
 	// 자료형과 변수
 	// 정수형, 실수형, 논리형, 문자열
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=MyVar)
-	int32 Number = 10;
+	int32 Number = 11;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MyVar)
 	float Distance = 3.14f;
@@ -41,4 +44,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MyVar)
 	FString MyName  = TEXT("이영훈");
+
+	UFUNCTION(BlueprintCallable)
+	int32 MyAddCallable( int32 a , int32 b );
+
+	UFUNCTION(BlueprintPure)
+	int32 MyAddPure( int32 a , int32 b );
+
+	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent)
+	int32 MyAddImplementableEvent( int32 a , int32 b );
+
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent)
+	int32 MyAddNativeEvent( int32 a , int32 b );
 };
