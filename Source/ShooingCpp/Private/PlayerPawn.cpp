@@ -3,6 +3,9 @@
 
 #include "PlayerPawn.h"
 #include "Components/BoxComponent.h"
+#include "Components/ArrowComponent.h"
+#include "BulletActor.h"
+#include "Kismet/GameplayStatics.h"
 
 APlayerPawn::APlayerPawn()
 {
@@ -16,8 +19,14 @@ APlayerPawn::APlayerPawn()
 
 	//메시 컴포넌트를 추가해서 Root컴포넌트에 Attach
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>( TEXT( "MeshComp" ) );
+	MeshComp->SetupAttachment( BoxComp );
 
-	MeshComp->SetupAttachment( RootComponent );
+	// 총구위치를 생성하고 루트에 붙이고 배치하고싶다.
+	FirePositionComp = CreateDefaultSubobject<UArrowComponent>( TEXT( "FirePositionComp" ) );
+	FirePositionComp->SetupAttachment( RootComponent );
+	FirePositionComp->SetRelativeLocationAndRotation( FVector( 0 , 0 , 100 ) , FRotator( 90 , 0 , 0 ) );
+	
+	
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +51,22 @@ void APlayerPawn::Tick( float DeltaTime )
 
 	SetActorLocation( p0 + velocity * DeltaTime );
 
+
+
+	// 1. Tick에서 bAutoFire가 true일 때 
+	if (bAutoFire)
+	{
+		// 2. 시간이 흐르다가
+		CurrentTime += DeltaTime;
+		// 3. 현재시간이 발사 시간이 되면
+		if (CurrentTime > FireTime)
+		{
+			// 4. 총알을 만들고싶다.
+			MakeBullet();
+			// 5. 현재시간을 0으로 초기화하고싶다.
+			CurrentTime = 0;
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -51,6 +76,9 @@ void APlayerPawn::SetupPlayerInputComponent( UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAxis( TEXT( "Horizontal" ) , this , &APlayerPawn::OnMyAxisHorizontal );
 	PlayerInputComponent->BindAxis( TEXT( "Vertical" ) , this , &APlayerPawn::OnMyAxisVertical );
+
+	PlayerInputComponent->BindAction( TEXT( "Fire" ) , IE_Pressed , this , &APlayerPawn::OnMyActionFire );
+	PlayerInputComponent->BindAction( TEXT( "Fire" ) , IE_Released, this , &APlayerPawn::OnMyActionFire );
 
 }
 
@@ -62,5 +90,21 @@ void APlayerPawn::OnMyAxisHorizontal( float value )
 void APlayerPawn::OnMyAxisVertical( float value )
 {
 	v = value;
+}
+
+void APlayerPawn::OnMyActionFire()
+{
+	bAutoFire = !bAutoFire;
+	MakeBullet();
+	CurrentTime = 0;
+}
+
+void APlayerPawn::MakeBullet()
+{
+	FTransform t = FirePositionComp->GetComponentTransform();
+	GetWorld()->SpawnActor<ABulletActor>( BulletFactory , t );
+
+	// 소리를 재생하고싶다.
+	UGameplayStatics::PlaySound2D(GetWorld(), FireSound);
 }
 

@@ -37,6 +37,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UArrowComponent* FirePositionComp;
+
+
 	// 오른쪽으로 이동하고싶다.
 	// P = P0 + v(방향*Speed)t
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -48,6 +52,24 @@ public:
 
 	void OnMyAxisHorizontal( float value );
 	void OnMyAxisVertical( float value );
+
+	void OnMyActionFire();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ABulletActor> BulletFactory;
+
+	// Fire를 하면 소리를 내고싶다.
+	UPROPERTY(EditAnywhere)
+	class USoundBase* FireSound;
+
+	// 자동 총쏘기 기능을 만들고싶다.
+	// 마우스버튼 누르면  true, 떼면 false 를 기억하기 위한 변수 bAutoFire;
+	// Tick에서 시간이 흐르다가 발사 시간이 되면 총알을 만들고싶다.	
+	bool bAutoFire;
+	float CurrentTime;
+	float FireTime = 0.2f;
+
+	void MakeBullet();
 
 };
 
