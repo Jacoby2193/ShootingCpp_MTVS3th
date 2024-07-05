@@ -17,14 +17,29 @@ APlayerPawn::APlayerPawn()
 	// 박스 Extent를 50으로 하고싶다.
 	BoxComp->SetBoxExtent( FVector( 50 ) );
 
+
+	//BoxComp->SetCollisionEnabled( ECollisionEnabled::QueryAndPhysics );
+	//BoxComp->SetCollisionObjectType( ECC_GameTraceChannel1 );	// Player
+	//BoxComp->SetCollisionResponseToAllChannels( ECR_Ignore );
+	//BoxComp->SetCollisionResponseToChannel( ECC_GameTraceChannel3 , ECR_Overlap );
+
 	//메시 컴포넌트를 추가해서 Root컴포넌트에 Attach
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>( TEXT( "MeshComp" ) );
 	MeshComp->SetupAttachment( BoxComp );
+
+
+	BoxComp->SetGenerateOverlapEvents( true );
+	BoxComp->SetCollisionProfileName( TEXT( "Player" ) );
+
+	MeshComp->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+
 
 	// 총구위치를 생성하고 루트에 붙이고 배치하고싶다.
 	FirePositionComp = CreateDefaultSubobject<UArrowComponent>( TEXT( "FirePositionComp" ) );
 	FirePositionComp->SetupAttachment( RootComponent );
 	FirePositionComp->SetRelativeLocationAndRotation( FVector( 0 , 0 , 100 ) , FRotator( 90 , 0 , 0 ) );
+
+	FirePositionComp->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 	
 	
 }
@@ -94,9 +109,15 @@ void APlayerPawn::OnMyAxisVertical( float value )
 
 void APlayerPawn::OnMyActionFire()
 {
+	// 마우스 왼쪽 버튼을 누르면 bAutoFire를 On/Off 전환하고싶다.
 	bAutoFire = !bAutoFire;
-	MakeBullet();
-	CurrentTime = 0;
+
+	// 만약 bAutoFire가 활성화 되면 총알을 한발 쏘고싶다.
+	if (bAutoFire)
+	{
+		MakeBullet();
+		CurrentTime = 0;
+	}
 }
 
 void APlayerPawn::MakeBullet()

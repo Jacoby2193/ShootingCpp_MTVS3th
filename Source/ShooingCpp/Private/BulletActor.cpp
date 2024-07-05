@@ -2,6 +2,7 @@
 
 #include "BulletActor.h"
 #include "Components/BoxComponent.h"
+#include "EnemyActor.h"
 
 ABulletActor::ABulletActor()
 {
@@ -23,12 +24,21 @@ ABulletActor::ABulletActor()
 		MeshComp->SetStaticMesh(TempMesh.Object);
 		MeshComp->SetRelativeScale3D(FVector( 0.75f , 0.25f , 1));
 	}
+
+
+	BoxComp->SetGenerateOverlapEvents( true );
+	BoxComp->SetCollisionProfileName( TEXT( "Bullet" ) );
+
+	MeshComp->SetCollisionEnabled( ECollisionEnabled::NoCollision );
+
 }
 
 void ABulletActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 충돌체야 너 누군가와 부딪히면 나도 좀 알려줘!!
+	BoxComp->OnComponentBeginOverlap.AddDynamic( this , &ABulletActor::OnMyBoxBeginOverlap );
 }
 
 void ABulletActor::Tick(float DeltaTime)
@@ -42,5 +52,18 @@ void ABulletActor::Tick(float DeltaTime)
 	float t = DeltaTime;
 	SetActorLocation( P0 + velocity * t );
 
+}
+
+// 만약 부딪힌 상대가 AEnemy라면 너죽고 나죽고 하고 싶다.
+void ABulletActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult )
+{
+	// 만약 상대액터가 AEnemy라면
+	if (OtherActor->IsA<AEnemyActor>())
+	{
+		// 너죽고 : 죽어주세요!
+		OtherActor->Destroy();
+		// 나죽고
+		this->Destroy();
+	}
 }
 

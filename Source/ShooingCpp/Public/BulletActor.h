@@ -24,6 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// 만약 부딪힌 상대가 AEnemy라면 너죽고 나죽고 하고 싶다.
+	UFUNCTION()
+	void OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult );
+
 
 	// 앞으로 이동하고싶다.
 	// 외형, 충돌체, Speed
