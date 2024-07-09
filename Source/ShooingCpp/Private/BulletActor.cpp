@@ -3,6 +3,7 @@
 #include "BulletActor.h"
 #include "Components/BoxComponent.h"
 #include "EnemyActor.h"
+#include "Kismet/GameplayStatics.h"
 
 ABulletActor::ABulletActor()
 {
@@ -64,6 +65,11 @@ void ABulletActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent
 		OtherActor->Destroy();
 		// 나죽고
 		this->Destroy();
+
+		UGameplayStatics::PlaySound2D( GetWorld() , ExplosionSound );
+
+		// 폭발 VFX를 재생하고싶다.
+		UGameplayStatics::SpawnEmitterAtLocation( GetWorld() , ExplosionVFX , GetActorLocation() );
 	}
 }
 

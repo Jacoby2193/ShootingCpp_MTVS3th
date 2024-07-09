@@ -4,6 +4,7 @@
 #include "EnemyActor.h"
 #include "Components/BoxComponent.h"
 #include "PlayerPawn.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemyActor::AEnemyActor()
 {
@@ -90,6 +91,12 @@ void AEnemyActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent 
 		OtherActor->Destroy();
 		// 나죽자
 		this->Destroy();
+
+		// 폭발 SFX를 재생하고싶다.
+		UGameplayStatics::PlaySound2D( GetWorld() , ExplosionSound );
+
+		// 폭발 VFX를 재생하고싶다.
+		UGameplayStatics::SpawnEmitterAtLocation( GetWorld() , ExplosionVFX , GetActorLocation() );
 	}
 }
 

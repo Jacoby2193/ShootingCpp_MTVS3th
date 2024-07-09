@@ -39,4 +39,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	float Speed = 1000;
 
+	// 누군가와 충돌하면 폭발소리를 내고싶다.
+	UPROPERTY(EditAnywhere)
+	class USoundBase* ExplosionSound;
+
+	// - 폭발 VFX를 배치하고싶다.
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* ExplosionVFX;
+
 };

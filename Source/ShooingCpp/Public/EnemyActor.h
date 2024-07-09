@@ -37,7 +37,7 @@ public:
 	// 외형, 충돌체 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxComp;
-	
+
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* MeshComp;
 
@@ -52,4 +52,13 @@ public:
 
 	UPROPERTY(EditAnywhere ,BlueprintReadWrite)
 	float Speed = 500.f;
+
+	// 충돌하면 
+	// - 폭발소리를 내고싶다
+	UPROPERTY(EditAnywhere)
+	class USoundBase* ExplosionSound;
+
+	// - 폭발 VFX를 배치하고싶다.
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* ExplosionVFX;
 };
