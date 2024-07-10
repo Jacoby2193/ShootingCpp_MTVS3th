@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "PlayerPawn.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AEnemyActor::AEnemyActor()
 {
@@ -50,6 +51,9 @@ void AEnemyActor::BeginPlay()
 	// Java : 리스너
 	// 델리게이트
 	BoxComp->OnComponentBeginOverlap.AddDynamic(this, &AEnemyActor::OnMyBoxBeginOverlap );
+
+	FRotator rot = UKismetMathLibrary::MakeRotFromXZ( Direction , GetActorUpVector() );
+	SetActorRotation( rot );
 }
 
 // Called every frame

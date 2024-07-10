@@ -24,6 +24,12 @@ void AEnemyManagerActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	GetWorld()->GetTimerManager().SetTimer( Handle , this , &AEnemyManagerActor::MakeEnemy , 1 , true );
+}
+
+void AEnemyManagerActor::EndPlay( const EEndPlayReason::Type EndPlayReason )
+{
+	GetWorld()->GetTimerManager().ClearTimer( Handle );
 }
 
 // Called every frame
@@ -31,16 +37,16 @@ void AEnemyManagerActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// 1. 시간이 흐르다가
-	CurrentTime += DeltaTime;
-	// 2. 만약 현재시간이 생성시간을 초과하면
-	if (CurrentTime > MakeTime)
-	{
-	//		3. MakeEnemy함수를 호출하고싶다.
-		MakeEnemy();
-	//		4. 현재시간을 0으로 초기화 하고싶다.
-		CurrentTime = 0;
-	 }
+	//// 1. 시간이 흐르다가
+	//CurrentTime += DeltaTime;
+	//// 2. 만약 현재시간이 생성시간을 초과하면
+	//if (CurrentTime > MakeTime)
+	//{
+	////		3. MakeEnemy함수를 호출하고싶다.
+	//	MakeEnemy();
+	////		4. 현재시간을 0으로 초기화 하고싶다.
+	//	CurrentTime = 0;
+	// }
 }
 
 void AEnemyManagerActor::MakeEnemy()
