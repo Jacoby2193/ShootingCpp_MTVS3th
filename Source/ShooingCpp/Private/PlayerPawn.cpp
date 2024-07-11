@@ -6,6 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "BulletActor.h"
 #include "Kismet/GameplayStatics.h"
+#include "ShooingGameMode.h"
 
 APlayerPawn::APlayerPawn()
 {
@@ -48,6 +49,14 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	GM = Cast<AShooingGameMode>(GetWorld()->GetAuthGameMode());
+	
+	// 현재체력을 최대체력으로 하고싶다.
+	HP = MaxHP;
+	// UI를 호출
+	GM->SetHPUI( HP , MaxHP );
+
 
 }
 
@@ -127,5 +136,15 @@ void APlayerPawn::MakeBullet()
 
 	// 소리를 재생하고싶다.
 	UGameplayStatics::PlaySound2D(GetWorld(), FireSound);
+}
+
+void APlayerPawn::OnMyTakeDamage( int32 damage )
+{
+	HP -= damage;
+
+	// UI를 호출
+	GM->SetHPUI( HP , MaxHP );
+
+	UE_LOG( LogTemp , Warning , TEXT( "%.1f" ) , HP );
 }
 

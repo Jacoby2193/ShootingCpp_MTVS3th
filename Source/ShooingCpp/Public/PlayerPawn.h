@@ -71,5 +71,20 @@ public:
 
 	void MakeBullet();
 
+	// 최대체력, 현재체력을 만들고 싶다.
+	float HP;
+	
+	UPROPERTY(EditAnywhere)
+	float MaxHP = 2;
+
+	void OnMyTakeDamage(int32 damage); // 적이 호출할 예정~!!!
+
+	UPROPERTY()
+	class AShooingGameMode* GM;
+
+	// 태어날 때 체력의 값을 최대체력으로 하고싶다. + UI에 반영하고싶다.
+	// 적이 나와 충돌하면 체력을 1 소모하고싶다. + UI에 반영하고싶다.
+	// 만약 체력이 0이하가되면 파괴되고싶다.
+
 };
 

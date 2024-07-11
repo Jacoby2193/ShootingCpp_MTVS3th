@@ -38,10 +38,13 @@ void AEnemyActor::BeginPlay()
 		// 명시적, 암시적
 		auto* player = GetWorld()->GetFirstPlayerController()->GetPawn();
 		//	내가 목적지를 향하는 방향을 알고싶다.
-		Direction = player->GetActorLocation() - this->GetActorLocation();
-		//	그 방향의 크기를 1로 하고싶다.
-		Direction.Normalize();
-		//  그 방향을 기억하고싶다.
+		if (nullptr != player)
+		{
+			Direction = player->GetActorLocation() - this->GetActorLocation();
+			//	그 방향의 크기를 1로 하고싶다.
+			Direction.Normalize();
+			//  그 방향을 기억하고싶다.
+		}
 	}
 	// 그렇지 않고 나머지 확률로
 	else {
@@ -91,8 +94,15 @@ void AEnemyActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent 
 	// 만약 상대가 플레이어라면
 	if (OtherActor->IsA<APlayerPawn>())
 	{
-		// 너죽고
-		OtherActor->Destroy();
+		APlayerPawn* player = Cast<APlayerPawn>( OtherActor );
+		// 주인공의 체력을 1 감소하고 싶다.
+		player->OnMyTakeDamage( 1 );
+		// 만약 주인공의 체력이 0이하라면 파괴하고싶다.
+		if (player->HP <= 0)
+		{
+			player->Destroy();
+		}
+
 		// 나죽자
 		this->Destroy();
 

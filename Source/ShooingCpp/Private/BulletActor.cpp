@@ -4,6 +4,7 @@
 #include "Components/BoxComponent.h"
 #include "EnemyActor.h"
 #include "Kismet/GameplayStatics.h"
+#include "ShooingGameMode.h"
 
 ABulletActor::ABulletActor()
 {
@@ -65,6 +66,11 @@ void ABulletActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent
 		OtherActor->Destroy();
 		// 나죽고
 		this->Destroy();
+
+		// 1. 게임모드를 가져오고싶다.
+		auto* gm = Cast<AShooingGameMode>( GetWorld()->GetAuthGameMode() );
+		// 2. 점수를 1점 추가하고싶다.
+		gm->AddScore( 1 );
 
 		UGameplayStatics::PlaySound2D( GetWorld() , ExplosionSound );
 

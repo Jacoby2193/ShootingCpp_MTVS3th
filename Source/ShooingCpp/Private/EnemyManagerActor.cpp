@@ -29,6 +29,8 @@ void AEnemyManagerActor::BeginPlay()
 
 void AEnemyManagerActor::EndPlay( const EEndPlayReason::Type EndPlayReason )
 {
+	Super::EndPlay( EndPlayReason );
+
 	GetWorld()->GetTimerManager().ClearTimer( Handle );
 }
 
