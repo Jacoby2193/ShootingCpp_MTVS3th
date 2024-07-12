@@ -4,12 +4,15 @@
 #include "MainUI.h"
 #include "Components/TextBlock.h"
 #include "Components/ProgressBar.h"
+#include "GameoverUI.h"
 
 void UMainUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	Text_Score->SetText( FText::AsNumber( 0 ) );
+	// 시작할 때 게임오버IU를 비활성화 해놓고싶다.
+	Gameover->SetVisibility( ESlateVisibility::Hidden );
 }
 
 void UMainUI::SetScore( int32 NewScore )

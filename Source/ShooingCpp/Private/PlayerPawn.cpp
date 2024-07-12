@@ -57,7 +57,10 @@ void APlayerPawn::BeginPlay()
 	// UI를 호출
 	GM->SetHPUI( HP , MaxHP );
 
-
+	// 마우스 커서를 안보이게하고 입력을 Game로 하고싶다.
+	auto* pc = GetWorld()->GetFirstPlayerController();
+	pc->SetShowMouseCursor( false );
+	pc->SetInputMode( FInputModeGameOnly() );
 }
 
 // Called every frame

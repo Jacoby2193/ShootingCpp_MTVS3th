@@ -22,7 +22,11 @@ public:
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UProgressBar* HPBar;
-	
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UGameoverUI* Gameover;
+
+
 	void SetScore( int32 NewScore );
 
 	void SetHP( float Cur , float Max );

@@ -6,6 +6,9 @@
 #include "PlayerPawn.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ShooingGameMode.h"
+#include "GameoverUI.h"
+#include "MainUI.h"
 
 AEnemyActor::AEnemyActor()
 {
@@ -101,6 +104,16 @@ void AEnemyActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent 
 		if (player->HP <= 0)
 		{
 			player->Destroy();
+			
+			// 게임모드를 가져오고싶다.
+			auto* gm = Cast<AShooingGameMode>(GetWorld()->GetAuthGameMode());
+			// 게임오버UI를 활성화 하고싶다.
+			gm->MainUI->Gameover->SetVisibility( ESlateVisibility::Visible );
+			// 마우스 커서를 보이게하고 입력을 UI로 하고싶다.
+			auto* pc = GetWorld()->GetFirstPlayerController();
+			pc->SetShowMouseCursor( true );
+			pc->SetInputMode( FInputModeUIOnly() );
+
 		}
 
 		// 나죽자
