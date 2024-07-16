@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Animation/WidgetAnimation.h"
 
 void UGameoverUI::NativeConstruct()
 {
@@ -13,6 +14,7 @@ void UGameoverUI::NativeConstruct()
 	// 시작할 때 버튼에 기능을 연결하고싶다.
 	Button_Restart->OnClicked.AddDynamic( this , &UGameoverUI::OnMyRestart );
 	Button_Quit->OnClicked.AddDynamic( this , &UGameoverUI::OnMyQuit );
+	PlayAnimation( MyAnim );
 }
 
 void UGameoverUI::OnMyRestart()

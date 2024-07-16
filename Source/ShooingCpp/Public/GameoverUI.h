@@ -27,6 +27,10 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* Button_Quit;
 
+	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* MyAnim;
+
+
 	UFUNCTION()
 	void OnMyRestart();
 	UFUNCTION()

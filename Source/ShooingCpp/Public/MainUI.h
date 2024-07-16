@@ -21,6 +21,9 @@ public:
 	class UTextBlock* Text_Score;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* Text_HighScore;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UProgressBar* HPBar;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
@@ -30,4 +33,5 @@ public:
 	void SetScore( int32 NewScore );
 
 	void SetHP( float Cur , float Max );
+	void SetHighScore( int32 NewHighScore );
 };

@@ -25,3 +25,8 @@ void UMainUI::SetHP( float Cur , float Max )
 {
 	HPBar->SetPercent( Cur / Max );
 }
+
+void UMainUI::SetHighScore( int32 NewHighScore )
+{
+	Text_HighScore->SetText( FText::AsNumber( NewHighScore ) );
+}
