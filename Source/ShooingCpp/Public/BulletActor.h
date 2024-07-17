@@ -47,4 +47,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* ExplosionVFX;
 
+	void SetActive( bool bValue );
+
 };

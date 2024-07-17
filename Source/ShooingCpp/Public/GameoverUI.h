@@ -30,9 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
 	class UWidgetAnimation* MyAnim;
 
-
 	UFUNCTION()
 	void OnMyRestart();
+
 	UFUNCTION()
 	void OnMyQuit();
 

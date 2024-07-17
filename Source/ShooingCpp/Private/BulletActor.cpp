@@ -11,7 +11,7 @@ ABulletActor::ABulletActor()
 	PrimaryActorTick.bCanEverTick = true;
 	BoxComp = CreateDefaultSubobject<UBoxComponent>( TEXT( "BoxComp" ) );
 	SetRootComponent( BoxComp );
-	BoxComp->SetBoxExtent( FVector( 37.5f, 12.5f, 50.f ) );
+	BoxComp->SetBoxExtent( FVector( 37.5f , 12.5f , 50.f ) );
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>( TEXT( "MeshComp" ) );
 	MeshComp->SetupAttachment( RootComponent );
@@ -23,8 +23,8 @@ ABulletActor::ABulletActor()
 	if (TempMesh.Succeeded())
 	{
 		// 그 에셋을 컴포넌트에 넣어주고싶다.
-		MeshComp->SetStaticMesh(TempMesh.Object);
-		MeshComp->SetRelativeScale3D(FVector( 0.75f , 0.25f , 1));
+		MeshComp->SetStaticMesh( TempMesh.Object );
+		MeshComp->SetRelativeScale3D( FVector( 0.75f , 0.25f , 1 ) );
 	}
 
 
@@ -38,14 +38,14 @@ ABulletActor::ABulletActor()
 void ABulletActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// 충돌체야 너 누군가와 부딪히면 나도 좀 알려줘!!
 	BoxComp->OnComponentBeginOverlap.AddDynamic( this , &ABulletActor::OnMyBoxBeginOverlap );
 }
 
-void ABulletActor::Tick(float DeltaTime)
+void ABulletActor::Tick( float DeltaTime )
 {
-	Super::Tick(DeltaTime);
+	Super::Tick( DeltaTime );
 
 	// 나의 앞으로 이동하고 싶다.
 	// P = P0 + vt
@@ -53,7 +53,6 @@ void ABulletActor::Tick(float DeltaTime)
 	FVector velocity = GetActorForwardVector() * Speed;
 	float t = DeltaTime;
 	SetActorLocation( P0 + velocity * t );
-
 }
 
 // 만약 부딪힌 상대가 AEnemy라면 너죽고 나죽고 하고 싶다.
@@ -64,8 +63,8 @@ void ABulletActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent
 	{
 		// 너죽고 : 죽어주세요!
 		OtherActor->Destroy();
-		// 나죽고
-		this->Destroy();
+		// 나죽고->비활성화 하고싶다.
+		SetActive( false );
 
 		// 1. 게임모드를 가져오고싶다.
 		auto* gm = Cast<AShooingGameMode>( GetWorld()->GetAuthGameMode() );
@@ -76,6 +75,24 @@ void ABulletActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent
 
 		// 폭발 VFX를 재생하고싶다.
 		UGameplayStatics::SpawnEmitterAtLocation( GetWorld() , ExplosionVFX , GetActorLocation() );
+	}
+}
+
+void ABulletActor::SetActive( bool bValue )
+{
+	// BoxComp : 충돌체
+	// MeshComp : 외관
+	// 만약 bValue가 true라면 보이고, 충돌체 활성화 하고싶다.
+	MeshComp->SetVisibility( bValue );
+
+	if (bValue)
+	{
+		BoxComp->SetCollisionEnabled( ECollisionEnabled::QueryAndPhysics );
+	}
+	// 그렇지않다면 안보이고, 충돌체 비활성화 하고싶다.
+	else
+	{
+		BoxComp->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 	}
 }
 

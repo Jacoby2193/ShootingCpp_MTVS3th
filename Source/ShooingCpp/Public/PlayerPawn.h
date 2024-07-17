@@ -86,5 +86,14 @@ public:
 	// 적이 나와 충돌하면 체력을 1 소모하고싶다. + UI에 반영하고싶다.
 	// 만약 체력이 0이하가되면 파괴되고싶다.
 
+
+	// 총알을 오브젝트풀 처리하고싶다.
+	// [필요요소]
+	// - 최초 생성할 총알 갯수(몇개 만들것인가?)
+	UPROPERTY(EditAnywhere)
+	int32 MaxBulletCount = 10;
+	// - 총알 목록(탄창)
+	UPROPERTY()
+	TArray<class ABulletActor*> Magazine;
 };
 

@@ -61,6 +61,18 @@ void APlayerPawn::BeginPlay()
 	auto* pc = GetWorld()->GetFirstPlayerController();
 	pc->SetShowMouseCursor( false );
 	pc->SetInputMode( FInputModeGameOnly() );
+
+	// 탄창에 총알을 10개 추가하고싶다.
+	for (int32 i = 0; i < 10; i++)
+	{
+		FActorSpawnParameters params;
+		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		ABulletActor* bullet = GetWorld()->SpawnActor<ABulletActor>( BulletFactory , params );
+		// 생성된 총알을 비활하고
+		bullet->SetActive(false);
+		// 탄창에 넣고싶다.
+		Magazine.Add( bullet );
+	}
 }
 
 // Called every frame
@@ -134,11 +146,29 @@ void APlayerPawn::OnMyActionFire()
 
 void APlayerPawn::MakeBullet()
 {
-	FTransform t = FirePositionComp->GetComponentTransform();
-	GetWorld()->SpawnActor<ABulletActor>( BulletFactory , t );
+	// 탄창을 전부 검사해서 비활성화된 총알을 찾고싶다.
+	bool FindResult = false;
+	for (int i = 0; i < Magazine.Num(); i++)
+	{
+		// 찾았다면 
+		if (false == Magazine[i]->MeshComp->GetVisibleFlag())
+		{
+			FindResult = true;
+			// 그 총알을 활성화하고 총구 위치에 배치하고싶다.
+			Magazine[i]->SetActive( true );
+			FTransform t = FirePositionComp->GetComponentTransform();
+			Magazine[i]->SetActorTransform( t );
+			// 소리를 재생하고싶다.
+			UGameplayStatics::PlaySound2D( GetWorld() , FireSound );
+			// 반복을 그만하고싶다.
+			break;
+		}
+	}
+	if (false == FindResult)
+	{
+		//  찰칵 소리를 내고싶다.
+	}
 
-	// 소리를 재생하고싶다.
-	UGameplayStatics::PlaySound2D(GetWorld(), FireSound);
 }
 
 void APlayerPawn::OnMyTakeDamage( int32 damage )

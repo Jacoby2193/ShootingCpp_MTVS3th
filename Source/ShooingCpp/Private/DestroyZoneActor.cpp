@@ -3,6 +3,7 @@
 
 #include "DestroyZoneActor.h"
 #include "Components/BoxComponent.h"
+#include "BulletActor.h"
 
 // Sets default values
 ADestroyZoneActor::ADestroyZoneActor()
@@ -42,7 +43,17 @@ void ADestroyZoneActor::NotifyActorBeginOverlap( AActor* OtherActor )
 {
 	Super::NotifyActorBeginOverlap( OtherActor );
 	
-	// 부딪힌 상대를 파괴하고싶다.
-	OtherActor->Destroy();
+	// 부딪힌 상대가 총알이라면 비활성화 하고싶다.
+	// OtherActor 를 변신!!
+	ABulletActor* bullet = Cast<ABulletActor>( OtherActor );
+	if (bullet)
+	{
+		bullet->SetActive( false );
+	}
+	// 그렇지않다면 부딪힌 상대를 파괴하고싶다.
+	else
+	{
+		OtherActor->Destroy();
+	}
 }
 
