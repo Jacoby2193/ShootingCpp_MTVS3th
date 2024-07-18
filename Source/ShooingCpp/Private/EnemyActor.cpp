@@ -9,6 +9,7 @@
 #include "ShooingGameMode.h"
 #include "GameoverUI.h"
 #include "MainUI.h"
+#include "Components/WidgetComponent.h"
 
 AEnemyActor::AEnemyActor()
 {
@@ -26,12 +27,19 @@ AEnemyActor::AEnemyActor()
 
 	MeshComp->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 
+
+	HPComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPComp"));
+	HPComp->SetupAttachment( RootComponent );
+
 }
 
 // Called when the game starts or when spawned
 void AEnemyActor::BeginPlay()
 {
 	Super::BeginPlay();
+	// HPComp의 위젯을 가져와서 HpUI에 기억시키고싶다.
+	HpUI = Cast<UHPUI>(HPComp->GetWidget());
+
 	// 태어날 때 방향을 정하고
 	// 만약 30%의 확률로 플레이어방향
 	int32 randValue = FMath::RandRange( 0 , 9 );

@@ -61,4 +61,18 @@ public:
 	// - 폭발 VFX를 배치하고싶다.
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* ExplosionVFX;
+
+	// 체력을 가지고 UI로 표현하고싶다.
+	// 누군가와 부딪히면 체력을 1점 감소하고싶다.
+	// 만약 체력이 0이하라면 파괴 되고싶다.
+	// [필요요소]
+	// 체력, 최대체력, WidgetComponent, HPUI
+	int32 MaxHP = 2;
+	int32 HP = MaxHP;
+
+	UPROPERTY(EditAnywhere)
+	class UWidgetComponent* HPComp;
+
+	UPROPERTY()
+	class UHPUI* HpUI;
 };
