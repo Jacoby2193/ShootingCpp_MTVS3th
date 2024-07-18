@@ -10,6 +10,7 @@
 #include "GameoverUI.h"
 #include "MainUI.h"
 #include "Components/WidgetComponent.h"
+#include "HPUI.h"
 
 AEnemyActor::AEnemyActor()
 {
