@@ -59,10 +59,17 @@ void ABulletActor::Tick( float DeltaTime )
 void ABulletActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult )
 {
 	// 만약 상대액터가 AEnemy라면
-	if (OtherActor->IsA<AEnemyActor>())
+	auto* enemy = Cast<AEnemyActor>( OtherActor );
+	if (enemy)
 	{
-		// 너죽고 : 죽어주세요!
-		OtherActor->Destroy();
+		// 너 데미지 입어라
+		// 적의 OnMyTakeDamage() 호출하고싶다.
+		enemy->OnMyTakeDamage();
+		// 적의 체력이 0이하라면 적을 파괴하고싶다.
+		if (enemy->HP <= 0)
+		{
+			enemy->Destroy();
+		}
 		// 나죽고->비활성화 하고싶다.
 		SetActive( false );
 

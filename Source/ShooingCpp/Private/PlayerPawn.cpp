@@ -62,6 +62,10 @@ void APlayerPawn::BeginPlay()
 	pc->SetShowMouseCursor( false );
 	pc->SetInputMode( FInputModeGameOnly() );
 
+	// 플레이어가 죽으면 게임 일시정지 하고싶다.
+	UGameplayStatics::SetGamePaused( GetWorld() , false );
+
+
 	// 탄창에 총알을 10개 추가하고싶다.
 	for (int32 i = 0; i < 10; i++)
 	{

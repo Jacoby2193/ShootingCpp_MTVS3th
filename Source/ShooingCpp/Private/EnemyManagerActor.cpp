@@ -4,6 +4,7 @@
 #include "EnemyManagerActor.h"
 #include "EnemyActor.h"
 #include "Components/ArrowComponent.h"
+#include "ShooingGameMode.h"
 
 AEnemyManagerActor::AEnemyManagerActor()
 {
@@ -23,7 +24,13 @@ AEnemyManagerActor::AEnemyManagerActor()
 void AEnemyManagerActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	auto* gm = Cast<AShooingGameMode>( GetWorld()->GetAuthGameMode() );
+	if (gm->bBossMode)
+	{
+		return;
+	}
+
 	GetWorld()->GetTimerManager().SetTimer( Handle , this , &AEnemyManagerActor::MakeEnemy , 1 , true );
 }
 

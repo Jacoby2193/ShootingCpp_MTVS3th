@@ -40,6 +40,8 @@ void AEnemyActor::BeginPlay()
 	Super::BeginPlay();
 	// HPComp의 위젯을 가져와서 HpUI에 기억시키고싶다.
 	HpUI = Cast<UHPUI>(HPComp->GetWidget());
+	// 태어날때 체력 UI를 꽉 채우고싶다.
+	HpUI->UpdateHPBar( 1 , 1 );
 
 	// 태어날 때 방향을 정하고
 	// 만약 30%의 확률로 플레이어방향
@@ -123,6 +125,8 @@ void AEnemyActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent 
 			pc->SetShowMouseCursor( true );
 			pc->SetInputMode( FInputModeUIOnly() );
 
+			// 플레이어가 죽으면 게임 일시정지 하고싶다.
+			UGameplayStatics::SetGamePaused( GetWorld(), true );
 		}
 
 		// 나죽자
@@ -134,5 +138,11 @@ void AEnemyActor::OnMyBoxBeginOverlap( UPrimitiveComponent* OverlappedComponent 
 		// 폭발 VFX를 재생하고싶다.
 		UGameplayStatics::SpawnEmitterAtLocation( GetWorld() , ExplosionVFX , GetActorLocation() );
 	}
+}
+
+void AEnemyActor::OnMyTakeDamage()
+{
+	HP -= 1;
+	HpUI->UpdateHPBar( (float)HP , (float)MaxHP );
 }
 

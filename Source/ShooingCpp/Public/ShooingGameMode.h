@@ -62,5 +62,8 @@ public:
 
 	// UI의 값을 갱신하고싶다.
 	void SetHPUI(float Cur, float Max);
+
+	UPROPERTY(EditAnywhere)
+	bool bBossMode = true;
 	
 };

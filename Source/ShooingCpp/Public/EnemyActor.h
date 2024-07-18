@@ -75,4 +75,6 @@ public:
 
 	UPROPERTY()
 	class UHPUI* HpUI;
+
+	void OnMyTakeDamage();
 };
