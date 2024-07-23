@@ -58,6 +58,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool bDelay = true;
 
-
-
+	void TickFindTarget();
+	void TickMove( float DeltaTime );
+	void TickAttack( float DeltaTime );
 };
